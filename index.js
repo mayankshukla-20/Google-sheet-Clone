@@ -1,39 +1,44 @@
-const header = document.getElementById("header");
-const body = document.getElementById("body");
+const header = document.querySelector(".header");
+const snoContainer = document.querySelector(".sno-container");
+const rowsContainer = document.querySelector(".rows-container");
 
-for (let i = 65; i <= 90; i++) {
-  let char = String.fromCharCode(i);
+let columns = 27, rows = 50;
 
-  const bold = document.createElement("b");
-  bold.innerText = char;
-
-  header.appendChild(bold);
+for (let i = 0; i < columns; i++) {
+    const cell = document.createElement("div");
+    // <div></div>
+    // i = 1 => A => 65
+    // i = 2 => B => 66
+    // i = 3 => C => 67
+    // i = 26 => Z
+    i != 0 && (cell.innerText = String.fromCharCode(64 + i))
+    i === 0 ? (cell.className = "first-cell") : (cell.className = "cell");
+    header.appendChild(cell);
 }
 
-function createAndAppendRow(rowNumber) {
-  const row = document.createElement("div");
-  row.className = "row"; // <div class="row"></div>
-  // inside each row we should create 27 cells one for S.No
-  for (let i = 64; i <= 90; i++) {
-    if (i === 64) {
-      // This cell represents the S.No
-      const b = document.createElement("b");
-      b.innerText = rowNumber;
-      row.appendChild(b);
-    } else {
-      // This represents the empty cell
-      const cell = document.createElement("div");
-      cell.id = `${String.fromCharCode(i)}${rowNumber}`; // dynamic and unique id. COLROW => examples: C7, M8, A3
-      cell.contentEditable = "true";
-      cell.addEventListener("focus", onCellFocus);
-      row.appendChild(cell);
+function createRow(rowNumber) {
+    const row = document.createElement("div");
+    row.className = "row";
+
+    // <div class="row"> <div class="cell"></div> </div>
+
+    for (let i = 1; i < columns; i++) {
+        const cell = document.createElement("div");
+        cell.className = "cell";
+        cell.contentEditable = true;
+        cell.id = `${String.fromCharCode(64 + i)}${rowNumber}`;
+        cell.addEventListener("focus", onCellFocus);
+        row.appendChild(cell);
     }
-  }
-  body.appendChild(row);
+    return row;
 }
 
-// create 100 rows call the `createAndAppendRow` function for 100 times.
+for (let i = 1; i <= rows; i++) {
+    const snoCell = document.createElement("div");
+    snoCell.innerText = i;
+    snoCell.className = "sno";
+    snoContainer.appendChild(snoCell);
 
-for (let i = 1; i <= 100; i++) {
-  createAndAppendRow(i);
+    let rowElement = createRow(i);
+    rowsContainer.appendChild(rowElement);
 }
